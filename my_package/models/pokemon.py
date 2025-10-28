@@ -41,25 +41,54 @@ class Pokemon:
         Returns:
             dict: Information about the attack (damage, effectiveness, critical hit)
         """
-        
-        # 1. Vérifier si l'attaquant est KO
+
+       # 1. Check if the attacker is KO
         if self.ko:
             return {
-                'succes': False,
-                'message': f"{self.nom} est KO et ne peut pas attaquer !"
+                'success': False,
+                'message': f"{self.name} is KO and cannot attack!"
             }
         
-        # 2. Vérifier si la cible est KO
-        if cible.ko:
+        # 2. Check if the target is KO
+        if target.ko:
             return {
-                'succes': False,
-                'message': f"{cible.nom} est déjà KO !"
+                'success': False,
+                'message': f"{target.name} is already KO!"
             }
         
-        # 3. Calcul de la précision (95% de chance de toucher)
+        # 3. Calculate accuracy (95% chance of hitting)
         if random.random() > 0.95:
             return {
-                'succes': False,
-                'message': f"{self.nom} a raté son attaque !",
-                'degats': 0
+                'success': False,
+                'message': f"{self.name} missed their attack!",
+                'damage': 0
             }
+        base_damage = (self.attack * self.level / 5) - (target.defense / 2)
+        base_damage = max(1, base_damage)  # Minimum 1 damage
+        
+        # 4. Type multiplier (efficiency)
+        type_multiplier = self.EFFICIENCY.get(self.type, {}).get(target.type, 1.0)
+        # 4.5 On fait cela pour calculer les degat du multiplier en fonction de la cible et de l'attaquant
+        
+        # 5. Random variability (between 0.85 and 1.0)
+        variability = random.uniform(0.85, 1.0)
+
+
+        # 6. Constructing the attack message
+        main_message = f"{self.name} attacks {target.name}!"
+        damage_message = f"-> {final_damage} damage points inflicted"
+
+        if effectiveness_message:
+            messages.append(f"   {effectiveness_message}")
+        messages.append(damage_message)
+        
+        # 7. Return attack information
+        return {
+            'success': True,
+            'message': '\n'.join(messages),
+            'damage': final_damage,
+            'type_multiplier': type_multiplier,
+            'target_knocked_out': target.knocked_out
+        }
+    
+    
