@@ -118,4 +118,28 @@ class Pokemon:
         status = "KO" if self.ko else f"  {self.current_hp}/{self.max_hp} HP"
         return f"{self.name} (Lvl.{self.level}) [{self.type}] - {status}"
 
+
+
+class FirePokemon(Pokemon):
+    """Pokemon fire type"""
+
+    def __init__(self, name, level=5):
+        super().__init__(name, 'Fire', level)
+        self.attack += 1
+
+class WaterPokemon(Pokemon):
+    """Pokemon water type"""
+
+    def__init__(self, name, level=5):
+        super().__init__(name,'Water', level)
+        self.defense += 1
+
+class PlanPokemon(Pokemon):
+    """Pokemon plant type """
+
+    def__init__(self, name, level=5):
+        super().__init__(name, "Plant", level)
+        self.hp_max += 2
+        self.hp_max = self.hp_max 
+
     

@@ -9,4 +9,4 @@ class Arena:
     #    return "" % (self.name,)
     
     def __str__(self):
-        return f"Duel dans l'arene {self.name} de type ({self.type}) pour affronter le champion {self.champion}, pour recuperer le badge :\n {self.badge})"
+        return f"Challenge in arena {self.name} from type ({self.type}) to defy champion {self.champion}, and fetch badge :\n {self.badge})"
