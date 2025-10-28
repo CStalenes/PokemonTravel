@@ -28,3 +28,38 @@ class Pokemon:
     
     def __repr__(self):
         return f"Pokemon({self.name}, {self.type_pokemon}, {self.hp}, {self.attack}, {self.defense}, {self.speed}, {self.level})"
+
+
+    def attaque_pokemon(self, target):
+
+        """
+        Attacks a target Pokémon and calculates the damage inflicted.
+        
+        Args:
+            target (Pokemon): The Pokémon receiving the attack
+            
+        Returns:
+            dict: Information about the attack (damage, effectiveness, critical hit)
+        """
+        
+        # 1. Vérifier si l'attaquant est KO
+        if self.ko:
+            return {
+                'succes': False,
+                'message': f"{self.nom} est KO et ne peut pas attaquer !"
+            }
+        
+        # 2. Vérifier si la cible est KO
+        if cible.ko:
+            return {
+                'succes': False,
+                'message': f"{cible.nom} est déjà KO !"
+            }
+        
+        # 3. Calcul de la précision (95% de chance de toucher)
+        if random.random() > 0.95:
+            return {
+                'succes': False,
+                'message': f"{self.nom} a raté son attaque !",
+                'degats': 0
+            }
