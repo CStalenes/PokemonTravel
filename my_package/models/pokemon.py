@@ -39,7 +39,7 @@ class Pokemon:
             target (Pokemon): The Pokémon receiving the attack
             
         Returns:
-            dict: Information about the attack (damage, effectiveness, critical hit)
+            dict: Information about the attack (damage, effectiveness)
         """
 
        # 1. Check if the attacker is KO
@@ -63,6 +63,7 @@ class Pokemon:
                 'message': f"{self.name} missed their attack!",
                 'damage': 0
             }
+
         base_damage = (self.attack * self.level / 5) - (target.defense / 2)
         base_damage = max(1, base_damage)  # Minimum 1 damage
         
@@ -90,5 +91,31 @@ class Pokemon:
             'type_multiplier': type_multiplier,
             'target_knocked_out': target.knocked_out
         }
-    
+
+    def receive_damage(self, damage):
+        """
+        Receives damage and updates HP.
+        
+        Args:
+            damage (int): Number of damage points received
+        """
+        self.current_hp -= damage
+        
+        if self.current_hp <= 0:
+            self.current_hp = 0
+            self.knockout = True
+
+    def is_knockout(self):
+        """Checks if the Pokémon is knocked out"""
+        return self.knockout
+
+    def heal(self):
+        """Restores all of the Pokémon's HP"""
+        self.current_hp = self.max_hp
+        self.knockout = False
+
+    def __str__(self):
+        status = "KO" if self.ko else f"  {self.current_hp}/{self.max_hp} HP"
+        return f"{self.name} (Lvl.{self.level}) [{self.type}] - {status}"
+
     
