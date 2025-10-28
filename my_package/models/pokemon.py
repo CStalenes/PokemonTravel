@@ -30,7 +30,7 @@ class Pokemon:
         return f"Pokemon({self.name}, {self.type_pokemon}, {self.hp}, {self.attack}, {self.defense}, {self.speed}, {self.level})"
 
 
-    def attaque_pokemon(self, target):
+    def attack_pokemon(self, target):
 
         """
         Attacks a target Pokémon and calculates the damage inflicted.
