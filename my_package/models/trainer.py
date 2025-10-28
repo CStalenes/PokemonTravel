@@ -6,4 +6,4 @@ class Trainer:
         self.pokemon = pokemon_list
 
     def __str__(self):
-        return f"Voici" % (self.name) 
+        return f" Voici {self.name} de ({self.age}) ans - {self.gender}, avec sa teamn :\n {self.pokemon})"
