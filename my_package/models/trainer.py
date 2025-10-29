@@ -147,6 +147,42 @@ class Champion(Trainer):
         """
         super.()__init__(name)
         self.type_affinity = type_affinity
+
+    def _find_best_pokemon(self, adversary_pokemon):
+        """
+        Find the best Pokemon to send against the adversary
+        
+        Args:
+            adversary_pokemon (Pokemon): Adversary Pokemon
+            
+        Returns:
+            Pokemon: Best Pokemon available or None
+        """
+        best = None
+        best_score = -1
+        
+        for pokemon in self.team:
+            if pokemon.ko:
+                continue
+            
+            score = 0
+            
+            # Score based on remaining HP (0-100)
+            score += (pokemon.current_hp / pokemon.hp_max) * 100
+            
+            # Bonus if type advantage (+200)
+            if self._has_type_advantage(pokemon, adversary_pokemon):
+                score += 200
+            
+            # Malus if type disadvantage (-100)
+            if self._has_type_disadvantage(pokemon, adversary_pokemon):
+                score -= 100
+            
+            if score > best_score:
+                best_score = score
+                best = pokemon
+        
+        return best
     
 
     def _has_type_advantage(self, attacker, defender):
