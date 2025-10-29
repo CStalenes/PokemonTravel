@@ -101,3 +101,14 @@ class Game:
                 print(f"\n{i}. {pokemon}")
         
         input("\nPress Enter to return...")
+
+    def quit_game(self):
+        """Quit the game"""
+        clear_screen()
+        display_title("GOODBYE !")
+        
+        print(f"\nSee you soon, {self.player.name} !")
+        print(f"Badges obtained: {len(self.defeated_arenas)}/3")
+        
+        self.ongoing = False
+    
