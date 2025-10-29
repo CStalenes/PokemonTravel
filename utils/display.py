@@ -114,3 +114,12 @@ def display_progress_bar(current_value, max_value, width=30, label=""):
         print(f"{label} [{bar}] {current_value}/{max_value} ({percentage}%)")
     else:
         print(f"[{bar}] {current_value}/{max_value} ({percentage}%)")
+
+def wait_for_input(message="Press Enter to continue..."):
+    """
+    Wait for the user to press Enter
+    
+    Args:
+        message (str): Message to display
+    """
+    input(f"\n{message}")
