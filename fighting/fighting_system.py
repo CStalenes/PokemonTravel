@@ -372,6 +372,38 @@ class FightingSystem:
         """
         print(f"\n{pokemon.name} gains {experience} experience points !")
 
+
+    def _end_fight(self, winner):
+        """
+        Manage the end of the fight
+        
+        Args:
+            winner (Trainer): Winner of the fight
+        """
+        self.ongoing = False
+        
+        print(f"\n{'='*70}")
+        print(f"END OF FIGHT")
+        print(f"{'='*70}")
+        
+        if winner == self.trainer1:
+            print(f"VICTORY !")
+            print(f"{self.trainer1.name} has won the fight !")
+        
+        elif winner == self.trainer2:
+            print(f"DEFEAT...")
+            print(f"{self.trainer2.name} has lost the fight...")
+        else:
+            print(f"DRAW...")
+            print(f"The fight is a draw...")
+        
+        # Display the statistics
+        print(f"\n--- Fight statistics ---")
+        print(f"Turns: {self.current_turn}")
+        print(f"Damage inflicted by {self.trainer1.name}: {self.total_damage_trainer1}")
+        print(f"Damage inflicted by {self.trainer2.name}: {self.total_damage_trainer2}")
+        print(f"{'='*70}\n")
+
     def _pause(self, seconds=0.5):
         """
         Pause to make the fight more readable
