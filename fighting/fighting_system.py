@@ -106,16 +106,79 @@ class FightingSystem:
         """Display the current state of the fight"""
         print(f"\n--- Fight State ---")
         
+
         # Player's Pokemon
         p1 = self.trainer1.active_pokemon
         if p1:
-            display_progress_bar(p1.hp_actuals, p1.hp_max, label=f"HP {p1.name}")
+            percentage = int((p1.hp_actuals / p1.hp_max) * 100)
+            bar = self._display_hp_bar(percentage)
+            print(f"👤 {self.trainer1.name}: {p1.name} (Lvl.{p1.level})")
+            print(f"   {bar} {p1.hp_actuals}/{p1.hp_max} HP ({percentage}%)")
         
         print()
         
         # Adversary's Pokemon
         p2 = self.trainer2.active_pokemon
         if p2:
-            display_progress_bar(p2.hp_actuals, p2.hp_max, label=f"HP {p2.name}")
+            percentage = int((p2.hp_actuals / p2.hp_max) * 100)
+            bar = self._display_hp_bar(percentage)
+            print(f"👤 {self.trainer2.name}: {p2.name} (Lvl.{p2.level})")
+            print(f"   {bar} {p2.hp_actuals}/{p2.hp_max} HP ({percentage}%)")
         
         print(f"\n{'='*70}")
+
+    def _display_hp_bar(self, percentage):
+        """
+        Create a visual HP bar
+        
+        Args:
+            percentage (int): Percentage of HP (0-100)
+            
+        Returns:
+            str: Formatted HP bar
+        """
+        length = 20
+        filled = int((percentage / 100) * length)
+        empty = length - filled
+        
+        # Color according to the HP
+        if percentage > 50:
+            symbol = "█"
+        elif percentage > 20:
+            symbol = "▓"
+        else:
+            symbol = "░"
+        
+        bar = symbol * filled + "·" * empty
+        return f"[{bar}]"
+    
+    def _phase_action_player(self, player):
+        """
+        Phase where the player chooses his action
+        
+        Args:
+            player (Trainer): The player trainer
+            
+        Returns:
+            dict: Chosen action
+        """
+        print(f"\n--- Turn of {player.name} ---")
+        print("What do you want to do?")
+        print("1. ⚔️  Attaquer")
+        print("2. 🔄 Change Pokemon")
+        print("3. 🏃 Flee (only against wild Pokemon)")
+        
+        choice = input("\n➤ Your choice (1-3) : ").strip()
+        
+        if choice == '1':
+            return {'type': 'attack', 'trainer': player}
+        
+        elif choice == '2':
+            return self._menu_changement_pokemon(player)
+        
+        elif choice == '3':
+            return 'fuir'
+        
+        else:
+            print("❌ Invalid choice, default attack")
+            return {'type': 'attack', 'trainer': player}
