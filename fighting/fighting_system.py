@@ -317,13 +317,33 @@ class FightingSystem:
                 print(f"\n💀 {defender.name} is KO !")
                 
                 # Gain experience
-                exp_gagnee = self._calculate_experience(defender)
+                exp_gained = self._calculate_experience(defender)
                 self._gain_experience(attacker, exp_gained)
                 
                 # The defender must change of Pokemon
                 if not defender_trainer.team_ko():
-                    self._change_force(defender_trainer)
+                    self._force_change_pokemon(defender_trainer)
         else:
             print(result['message'])
+        
+        self._pause(1)
+    
+     def _force_change_pokemon(self, trainer):
+        """
+        Force a trainer to change of Pokemon (after a KO)
+        
+        Args:
+            trainer (Trainer): Trainer who must change
+        """
+        print(f"\n{trainer.name} must send another Pokemon !")
+        
+        if trainer == self.trainer1:
+            # The player chooses
+            self._menu_change_pokemon(trainer)
+        else:
+            # The IA chooses automatically
+            trainer.choose_available_pokemon()
+            if trainer.active_pokemon:
+                print(f" {trainer.name} sends {trainer.active_pokemon.name} !")
         
         self._pause(1)
