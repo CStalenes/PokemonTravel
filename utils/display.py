@@ -58,6 +58,19 @@ def display_menu(options, title=None):
     for i, option in enumerate(options, 1):
         print(f"{i}. {option}")
 
+def ask_confirmation(message="Are you sure?"):
+    """
+    Ask for confirmation from the user
+    
+    Args:
+        message (str): Confirmation message
+        
+    Returns:
+        bool: True if the user confirms (O/o), False otherwise
+    """
+    response = input(f"\n{message} (O/N) : ").strip().upper()
+    return response == 'O'
+
 
 def display_framed_message(message, width=70, character="*"):
     """
