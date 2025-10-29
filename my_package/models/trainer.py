@@ -148,6 +148,34 @@ class Champion(Trainer):
         super.()__init__(name)
         self.type_affinity = type_affinity
 
+    def choose_action_ia(self, adversary_pokemon):
+        """
+        Simple IA for the champion : decide what action to make
+        
+        Args:
+            adversary_pokemon (Pokemon): Adversary Pokemon currently in combat
+            
+        Returns:
+            dict: Action to perform {'action': 'attack'/'change', 'index': int}
+        """
+        # Strategy 1 : If the active Pokemon is in bad shape, try to change
+        if self.pokemon_actif.pv_actuels < self.pokemon_actif.pv_max * 0.3:
+            # Search for a Pokemon in better shape
+            best_pokemon = self._find_best_pokemon(adversary_pokemon)
+            if best_pokemon and best_pokemon != self.pokemon_actif:
+                index = self.team.index(best_pokemon)
+                return {'action': 'change', 'index': index}
+        
+        # Strategy 2 : If disadvantaged by the type, try to change
+        if self._has_type_disadvantage(self.pokemon_actif, adversary_pokemon):
+            best_pokemon = self._find_best_pokemon(adversary_pokemon)
+            if best_pokemon and best_pokemon != self.pokemon_actif:
+                index = self.team.index(best_pokemon)
+                return {'action': 'change', 'index': index}
+        
+        # Default : Attack
+        return {'action': 'attack'}
+
     def _find_best_pokemon(self, adversary_pokemon):
         """
         Find the best Pokemon to send against the adversary
