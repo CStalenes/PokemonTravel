@@ -70,10 +70,47 @@ def display_framed_message(message, width=70, character="*"):
     """
     print("\n" + character * width)
     
-    # Gérer les messages multi-lignes
+    # Handle multi-line messages
     lines = message.split("\n")
     for line in lines:
         padding = (width - len(line) - 4) // 2
         print(f"{character} {' ' * padding}{line}{' ' * (width - len(line) - padding - 4)} {character}")
     
     print(character * width + "\n")
+
+def display_progress_bar(current_value, max_value, width=30, label=""):
+    """
+    Display a progress bar
+    
+    Args:
+        current_value (int): Current value
+        max_value (int): Maximum value
+        width (int): Width of the bar
+        label (str): Text to display before the bar
+    
+    Example:
+        display_progress_bar(75, 100, 20, "PV")
+        # Display: PV [████████████████░░░░] 75/100 (75%)
+    """
+    if max_value == 0:
+        percentage = 0
+    else:
+        percentage = int((current_value / max_value) * 100)
+    
+    filled = int((current_value / max_value) * width) if max_value > 0 else 0
+    empty = width - filled
+    
+    # Choose the symbol according to the percentage
+    if percentage > 50:
+        symbol = "█"
+    elif percentage > 20:
+        symbol = "▓"
+    else:
+        symbol = "░"
+    
+    bar = symbol * filled + "░" * empty
+    
+    if label:
+        print(f"{label} [{bar}] {current_value}/{max_value} ({percentage}%)")
+    else:
+        print(f"[{bar}] {current_value}/{max_value} ({percentage}%)")
