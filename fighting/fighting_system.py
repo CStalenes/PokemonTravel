@@ -177,13 +177,13 @@ class FightingSystem:
             return self._menu_changement_pokemon(player)
         
         elif choice == '3':
-            return 'fuir'
+            return 'flee'
         
         else:
-            print("❌ Invalid choice, default attack")
+            print("Invalid choice, default attack")
             return {'type': 'attack', 'trainer': player}
 
-    def _menu_changement_pokemon(self, trainer):
+    def _menu_change_pokemon(self, trainer):
         """
         Menu to change Pokemon
         
@@ -221,5 +221,62 @@ class FightingSystem:
         except ValueError:
             pass
         
-        print("❌ Invalid choice")
+        print("Invalid choice")
         return {'type': 'attack', 'trainer': trainer}
+
+    def _phase_action_ia(self, adversary, player):
+        """
+        Phase where the IA decides its action
+        
+        Args:
+            adversary (Champion): Adversary controlled by the IA
+            player (Trainer): Player trainer
+            
+        Returns:
+            dict: Action chosen by the IA
+        """
+        # Vérifier si l'adversaire a une méthode IA (Champion)
+        if hasattr(adversary, 'choose_action_ia'):
+            decision = adversary.choose_action_ia(player.active_pokemon)
+            
+            if decision['action'] == 'change':
+                adversary.choose_pokemon(decision['index'])
+                return {'type': 'change', 'adversary': adversary}
+        
+        # Default : attack
+        return {'type': 'attack', 'adversary': adversary}
+    
+    def _resoudre_actions(self, action1, action2):
+        """
+        Resolve the actions in order of priority
+        
+        Args:
+            action1 (dict): Action of the first trainer
+            action2 (dict): Action of the second trainer
+        """
+        # Priority 1 : The changes of Pokemon are made first
+        actions = [action1, action2]
+        
+        # Sort : changes first, then attacks by speed order
+        def priority_action(action):
+            if action['type'] == 'change':
+                return (0, 0)  # Maximum priority
+            else:
+                # Speed order for attacks
+                speed = action['trainer'].active_pokemon.speed
+                return (1, -speed)  # Negative for decreasing order
+        
+        actions.sort(key=priority_action)
+        
+        # Execute the actions
+        for action in actions:
+            if not self.ongoing:
+                break
+            
+            trainer = action['trainer']
+            adversary = self.trainer2 if trainer == self.trainer1 else self.trainer1
+            
+            if action['type'] == 'attack':
+                self._execute_attack(trainer, adversary)
+            
+            # The changes have already been made in the previous phases
