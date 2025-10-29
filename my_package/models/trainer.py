@@ -148,4 +148,35 @@ class Champion(Trainer):
         super.()__init__(name)
         self.type_affinity = type_affinity
     
+
+    def _has_type_advantage(self, attacker, defender):
+        """
+        Check if the attacker has a type advantage
+        
+        Args:
+            attacker (Pokemon): Attacking Pokemon
+            defender (Pokemon): Defending Pokemon
+            
+        Returns:
+            bool: True if the attacker has a type advantage
+        """
+        from models.pokemon import Pokemon
+        
+        effectiveness = Pokemon.EFFICACITES.get(attacker.type, {}).get(defender.type, 1.0)
+        return effectiveness > 1.0
     
+    def _has_type_disadvantage(self, attacker, defender):
+        """
+        Check if the attacker has a type disadvantage
+        
+        Args:
+            attacker (Pokemon): Attacking Pokemon
+            defender (Pokemon): Defending Pokemon
+            
+        Returns:
+            bool: True if the attacker has a type disadvantage
+        """
+        from models.pokemon import Pokemon
+        
+        effectiveness = Pokemon.EFFICACITES.get(attacker.type, {}).get(defender.type, 1.0)
+        return effectiveness < 1.0
