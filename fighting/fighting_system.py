@@ -280,3 +280,50 @@ class FightingSystem:
                 self._execute_attack(trainer, adversary)
             
             # The changes have already been made in the previous phases
+
+
+    def _execute_attack(self, attacker_trainer, defender_trainer):
+        """
+        Execute an attack
+        
+        Args:
+            attacker_trainer (Trainer): Trainer who attacks
+            defender_trainer (Trainer): Trainer who defends
+        """
+        attacker = attacker_trainer.active_pokemon
+        defender = defender_trainer.active_pokemon
+        
+        if not attacker or attacker.ko:
+            return
+        
+        if not defenseur or defenseur.ko:
+            return
+        
+        # Execute the attack
+        print()
+        result = attacker.attack_pokemon(defender)
+        
+        if result['success']:
+            print(resultat['message'])
+            
+            # Update the statistics
+            if attacker_trainer == self.trainer1:
+                    self.total_damage_trainer1 += result['damage']
+            else:
+                self.total_damage_trainer2 += result['damage']
+            
+            # Check if the defender is KO
+            if result.get('target_knocked_out', False):
+                print(f"\n💀 {defender.name} is KO !")
+                
+                # Gain experience
+                exp_gagnee = self._calculate_experience(defender)
+                self._gain_experience(attacker, exp_gained)
+                
+                # The defender must change of Pokemon
+                if not defender_trainer.team_ko():
+                    self._change_force(defender_trainer)
+        else:
+            print(result['message'])
+        
+        self._pause(1)
