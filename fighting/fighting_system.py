@@ -101,3 +101,21 @@ class FightingSystem:
         
         # Pause between turns
         input("\nPress Enter to continue...")
+    
+    def _display_fight_state(self):
+        """Display the current state of the fight"""
+        print(f"\n--- Fight State ---")
+        
+        # Player's Pokemon
+        p1 = self.trainer1.active_pokemon
+        if p1:
+            display_progress_bar(p1.hp_actuals, p1.hp_max, label=f"HP {p1.name}")
+        
+        print()
+        
+        # Adversary's Pokemon
+        p2 = self.trainer2.active_pokemon
+        if p2:
+            display_progress_bar(p2.hp_actuals, p2.hp_max, label=f"HP {p2.name}")
+        
+        print(f"\n{'='*70}")
