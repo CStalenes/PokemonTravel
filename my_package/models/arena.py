@@ -58,7 +58,7 @@ class Arena:
         print(f"Attempts: {self.nb_attempts}")
         print(f"{'='*60}\n")
 
-        print(f"👑 {self.champion.name}: \"I am {self.champion.name}, ")
+        print(f"{self.champion.name}: \"I am {self.champion.name}, ")
         print(f"    master of the {self.type_arena} ! Are you ready to challenge me ?\"")
         
         return True
@@ -119,6 +119,16 @@ class Arena:
             print(f"  {i}. {pokemon.name} (Lvl.{pokemon.level}) - Type {pokemon.type}")
         
         print(f"{'='*60}")
+
+    def reset(self):
+        """
+        Reset the arena (for tests or replaying)
+        """
+        self.defeated = False
+        self.nb_attempts = 0
+        self.nb_victories = 0
+        
+        print(f"{self.name} has been reset")
     
     def __str__(self):
         """Textual representation of the arena"""
