@@ -164,7 +164,7 @@ class FightingSystem:
         """
         print(f"\n--- Turn of {player.name} ---")
         print("What do you want to do?")
-        print("1. ⚔️  Attaquer")
+        print("1. ⚔️  Attack")
         print("2. 🔄 Change Pokemon")
         print("3. 🏃 Flee (only against wild Pokemon)")
         
@@ -182,3 +182,44 @@ class FightingSystem:
         else:
             print("❌ Invalid choice, default attack")
             return {'type': 'attack', 'trainer': player}
+
+    def _menu_changement_pokemon(self, trainer):
+        """
+        Menu to change Pokemon
+        
+        Args:
+            trainer (Trainer): Trainer who changes Pokemon
+            
+        Returns:
+            dict: Change action
+        """
+        print(f"\n--- Team of {trainer.name} ---")
+        
+        # Display the team
+        for i, pokemon in enumerate(trainer.team, 1):
+            marker = "VS" if pokemon == trainer.active_pokemon else "  "
+            state = "KO" if pokemon.ko else f"{pokemon.hp_actuals}/{pokemon.hp_max} HP"
+            print(f"{marker} {i}. {pokemon.name} (Lvl.{pokemon.level}) - {state}")
+        
+        print(f"{len(trainer.team) + 1}. ← Cancel")
+        
+        choice = input(f"\n➤ Choose a Pokemon (1-{len(trainer.team)}) : ").strip()
+        
+        try:
+            index = int(choice) - 1
+            
+            if index == len(trainer.team):
+                # Cancel
+                return {'type': 'attack', 'trainer': trainer}
+            
+            if 0 <= index < len(trainer.team):
+                if trainer.choose_pokemon(index):
+                    return {'type': 'change', 'trainer': trainer, 'index': index}
+                else:
+                    # Change failed, default attack
+                    return {'type': 'attack', 'trainer': trainer}
+        except ValueError:
+            pass
+        
+        print("❌ Invalid choice")
+        return {'type': 'attack', 'trainer': trainer}
