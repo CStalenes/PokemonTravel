@@ -91,6 +91,56 @@ def display_framed_message(message, width=70, character="*"):
     
     print(character * width + "\n")
 
+def display_framed_ascii(text, style="simple"):
+    """
+    Display a text in an ASCII art frame
+    
+    Args:
+        text (str): Text to frame
+        style (str): Style of the frame ('simple', 'double', 'star')
+    """
+    styles = {
+        'simple': {
+            'top_left': '+',
+            'top_right': '+',
+            'bottom_left': '+',
+            'bottom_right': '+',
+            'horizontal': '-',
+            'vertical': '|'
+        },
+        'double': {
+            'top_left': '╔',
+            'top_right': '+',
+            'bottom_left': '+',
+            'bottom_right': '+',
+            'horizontal': '=',
+            'vertical': '|'
+        },
+        'star': {
+            'top_left': '+',
+            'top_right': '+',
+            'bottom_left': '+',
+            'bottom_right': '+',
+            'horizontal': '*',
+            'vertical': '*'
+        }
+    }
+    
+    s = styles.get(style, styles['simple'])
+    lines = text.split('\n')
+    width = max(len(line) for line in lines) + 2
+    
+    # Top line
+    print(s['top_left'] + s['horizontal'] * width + s['top_right'])
+    
+    # Content
+    for line in lines:
+        padding = width - len(line) - 1
+        print(f"{s['vertical']} {line}{' ' * padding}{s['vertical']}")
+    
+    # Bottom line
+    print(s['bottom_left'] + s['horizontal'] * width + s['bottom_right'])
+
 def display_progress_bar(current_value, max_value, width=30, label=""):
     """
     Display a progress bar
