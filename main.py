@@ -51,3 +51,53 @@ class Game:
         print(f"\nYou have chosen {starter.name} !")
         print(f"   Type: {starter.type_pokemon} | Level: {starter.level}")
         print(f"   HP: {starter.hp_max} | Attack: {starter.attack}")
+
+    def main_menu(self):
+        """Display the main menu and manage the choices"""
+        while self.en_cours:
+            clear_screen()
+            display_title("MAIN MENU")
+            
+            print(f"\nTrainer: {self.player.name}")
+            print(f"Badges obtained: {len(self.defeated_arenas)}/3")
+            
+            display_separator()
+            
+            options = [
+                "View my team",
+                "Challenge an arena",
+                "Train (random fight)",
+                "View the arenas",
+                "Quit the game"
+            ]
+
+            display_menu(options)
+            
+            choice = input("\nYour choice : ").strip()
+            
+            if choice == '1':
+                self.afficher_equipe()
+            elif choice == '2':
+                self.choose_arena()
+            elif choice == '3':
+                self.train()
+            elif choice == '4':
+                self.display_arenas()
+            elif choix == '5':
+                self.quit_game()
+            else:
+                print("\nInvalid choice !")
+                input("\nPress Enter...")
+    
+    def display_team(self):
+        """Display the player's team"""
+        clear_screen()
+        display_title("MY TEAM")
+        
+        if not self.player.team:
+            print("\nYou don't have any Pokemon yet !")
+        else:
+            for i, pokemon in enumerate(self.player.team, 1):
+                print(f"\n{i}. {pokemon}")
+        
+        input("\nPress Enter to return...")
