@@ -314,7 +314,7 @@ class FightingSystem:
             
             # Check if the defender is KO
             if result.get('target_knocked_out', False):
-                print(f"\n💀 {defender.name} is KO !")
+                print(f"\n{defender.name} is KO !")
                 
                 # Gain experience
                 exp_gained = self._calculate_experience(defender)
@@ -347,3 +347,12 @@ class FightingSystem:
                 print(f" {trainer.name} sends {trainer.active_pokemon.name} !")
         
         self._pause(1)
+
+    def _pause(self, seconds=0.5):
+        """
+        Pause to make the fight more readable
+        
+        Args:
+            seconds (float): Duration of the pause
+        """
+        time.sleep(seconds)
