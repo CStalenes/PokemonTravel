@@ -112,3 +112,12 @@ class Game:
         
         self.ongoing = False
     
+def main():
+    """Main function"""
+    game = Game()
+    game.initialize_game()
+    game.main_menu()
+
+
+if __name__ == "__main__":
+    main()
