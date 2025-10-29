@@ -1,0 +1,1 @@
+from .fighting_system import FightingSystem
