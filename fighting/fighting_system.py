@@ -348,6 +348,30 @@ class FightingSystem:
         
         self._pause(1)
 
+
+    def _calculate_experience(self, defeated_pokemon):
+        """
+        Calculate the experience gained after defeating a Pokemon
+        
+        Args:
+            defeated_pokemon (Pokemon): Defeated Pokemon
+            
+        Returns:
+            int: Experience points gained after defeating a Pokemon
+        """
+        # Simple formula: level of the defeated Pokemon * 10
+        return defeated_pokemon.level * 10
+    
+    def _gain_experience(self, pokemon, experience):
+        """
+        Gain experience to a Pokemon
+        
+        Args:
+            pokemon (Pokemon): Pokemon who gains experience
+            experience (int): Experience points gained
+        """
+        print(f"\n{pokemon.name} gains {experience} experience points !")
+
     def _pause(self, seconds=0.5):
         """
         Pause to make the fight more readable
