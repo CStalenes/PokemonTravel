@@ -113,22 +113,47 @@ class Game:
         self.ongoing = False
 
     def create_arenas(self):
-    """Create the three arenas with their champions"""
-    
-    # Fire Arena
-    fire_champion = Champion("Pierre", "Fire")
-    champion_feu.add_pokemon(FirePokemon("Ponyta", level=8))
-    fire_champion.add_pokemon(FirePokemon("Goupix", level=10))
-    
-    # Water Arena  
-    water_champion = Champion("Ondine", "Water")
-    water_champion.add_pokemon(WaterPokemon("Stari", level=12))
-    water_champion.add_pokemon(WaterPokemon("Psykokwak", level=14))
-    
-    # Plant Arena
-    plant_champion = Champion("Erika", "Plant")
-    plant_champion.add_pokemon(PlantPokemon("Mystherbe", level=16))
-    plant_champion.add_pokemon(PlantPokemon("Chétiflor", level=18))
+        """Create the three arenas with their champions"""
+
+        # Fire Arena
+        fire_champion = Champion("Pierre", "Fire")
+        champion_feu.add_pokemon(FirePokemon("Ponyta", level=8))
+        fire_champion.add_pokemon(FirePokemon("Goupix", level=10))
+        fire_arena = Arena("Fire Arena", "Fire", fire_champion, "Badge Volcan")
+
+        # Water Arena  
+        water_champion = Champion("Ondine", "Water")
+        water_champion.add_pokemon(WaterPokemon("Stari", level=12))
+        water_champion.add_pokemon(WaterPokemon("Psykokwak", level=14))
+        water_arena = Arena("Water Arena", "Water", water_champion, "Badge Marine")
+
+        # Plant Arena
+        plant_champion = Champion("Erika", "Plant")
+        plant_champion.add_pokemon(PlantPokemon("Mystherbe", level=16))
+        plant_champion.add_pokemon(PlantPokemon("Chétiflor", level=18))
+        plant_arena = Arena("Plant Arena", "Plant", plant_champion, "Badge Vert")
+
+        self.arenas.extend([fire_arena, water_arena, plant_arena])
+
+    # Challenge an arena
+    def challenge_arena(self, arena):
+        """Challenge an arena"""
+        if not arena.challenge():
+            return  # Arena already defeated
+        
+        # Display strategic advice
+        arena.display_advice()
+        
+        # Start the fight
+        fight = FightingSystem(self.player, arena.champion)
+        victory = fight.start()
+        
+        # Handle the result
+        if victory:
+            arena.player_victory()
+            self.defeated_arenas.append(arena)
+        else:
+            arena.player_defeat()
     
 def main():
     """Main function"""

@@ -246,7 +246,7 @@ class FightingSystem:
         # Default : attack
         return {'type': 'attack', 'adversary': adversary}
     
-    def _resoudre_actions(self, action1, action2):
+    def _resolve_actions(self, action1, action2):
         """
         Resolve the actions in order of priority
         
