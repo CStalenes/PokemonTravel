@@ -142,4 +142,32 @@ class PlanPokemon(Pokemon):
         self.hp_max += 2
         self.hp_max = self.hp_max 
 
+
+class PokemonFactory:
+    """Factory to create Pokémon according to their type"""
     
+    POKEMON_TYPES = {
+        'Fire': FirePokemon,
+        'Water': WaterPokemon,
+        'Plant': PlantPokemon
+    }
+    
+    @staticmethod
+    def create_pokemon(name, type_pokemon, level=5):
+        """
+        Create a Pokemon of the specified type
+        
+        Args:
+            name (str): Name of the Pokemon
+            type_pokemon (str): 'Fire', 'Water', or 'Plant'
+            level (int): Level of the Pokemon
+            
+        Returns:
+            Pokemon: Instance of the created Pokemon
+        """
+        pokemon_class = PokemonFactory.POKEMON_TYPES.get(type_pokemon)
+        
+        if pokemon_class is None:
+            raise ValueError(f"Type '{type_pokemon}' unknown")
+        
+        return pokemon_class(name, level)
