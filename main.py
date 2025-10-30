@@ -1,3 +1,10 @@
+from my_package.models.pokemon import FirePokemon, WaterPokemon, PlantPokemon
+from my_package.models.trainer import Trainer, Champion
+from my_package.models.arena import Arena
+from my_package.fighting.fighting_system import FightingSystem
+from my_package.utils.display import display_title, display_menu, clear_screen, display_separator
+
+
 class Game:
     """Main class managing the game flow"""
     
