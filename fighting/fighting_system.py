@@ -328,7 +328,7 @@ class FightingSystem:
         
         self._pause(1)
     
-     def _force_change_pokemon(self, trainer):
+    def _force_change_pokemon(self, trainer):
         """
         Force a trainer to change of Pokemon (after a KO)
         

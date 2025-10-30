@@ -17,13 +17,13 @@ class Trainer:
             print(f"NOPE {self.name} team are fully complete with 6 Pokemon !")
             return False
         
-        self.equipe.append(pokemon)
+        self.team.append(pokemon)
         
         #  1st pokemon become active
-        if len(self.equipe) == 1:
-            self.pokemon_actif = pokemon
+        if len(self.team) == 1:
+            self.active_pokemon = pokemon
         
-        return 
+        return True
         
     def choose_pokemon(self, index):
         """
@@ -48,13 +48,13 @@ class Trainer:
             return False
         
         # check if the Pokemon is not already active
-        if pokemon_chosen == self.pokemon_actif:
+        if pokemon_chosen == self.active_pokemon:
             print(f" !! {pokemon_chosen.name} is already in combat !")
             return False
         
         # change the Pokemon
-        previous = self.pokemon_actif.name if self.pokemon_actif else "None"
-        self.pokemon_actif = pokemon_chosen
+        previous = self.active_pokemon.name if self.active_pokemon else "None"
+        self.active_pokemon = pokemon_chosen
         print(f" {self.name} recall {previous} and send {pokemon_chosen.name} !")
         
         return True
@@ -62,7 +62,7 @@ class Trainer:
 
     def choose_available_pokemon(self):
         """
-        Choose automatically the first available Pokemon (not KO)
+        Choose automatically the first able to fight Pokemon (not KO)
         Useful when the active Pokemon is KO
         
         Returns:
@@ -99,7 +99,7 @@ class Trainer:
         Used after a victory or in a Pokemon center
         """
         for pokemon in self.team:
-            pokemon.soigner()
+            pokemon.heal()
         
         print(f"All the Pokemon of {self.name} have been healed !")
     
@@ -116,7 +116,7 @@ class Trainer:
             return
         
         for i, pokemon in enumerate(self.team, 1):
-            marker = "VS" if pokemon == self.pokemon_actif else "   "
+            marker = "VS" if pokemon == self.active_pokemon else "   "
             print(f"{marker}{i}. {pokemon}")
         
         print(f"{'='*50}")
@@ -125,7 +125,7 @@ class Trainer:
         """ Trainer Profile"""
         nb_pokemon = len(self.team)
         nb_availability = self.count_available_pokemon()
-        return f" {self.name} - {nb_availability}/{nb_pokemon} Pokemon available"
+        return f" {self.name} - {nb_availability}/{nb_pokemon} Pokemon able to fight"
 
 
 class Champion(Trainer):
@@ -145,7 +145,7 @@ class Champion(Trainer):
             name (str): champion name
             type_affinity (str): champion elemental type
         """
-        super.()__init__(name)
+        super().__init__(name)
         self.type_affinity = type_affinity
 
     def choose_action_ia(self, adversary_pokemon):
@@ -159,17 +159,17 @@ class Champion(Trainer):
             dict: Action to perform {'action': 'attack'/'change', 'index': int}
         """
         # Strategy 1 : If the active Pokemon is in bad shape, try to change
-        if self.pokemon_actif.pv_actuels < self.pokemon_actif.pv_max * 0.3:
+        if self.active_pokemon.current_hp < self.active_pokemon.hp_max * 0.3:
             # Search for a Pokemon in better shape
             best_pokemon = self._find_best_pokemon(adversary_pokemon)
-            if best_pokemon and best_pokemon != self.pokemon_actif:
+            if best_pokemon and best_pokemon != self.active_pokemon:
                 index = self.team.index(best_pokemon)
                 return {'action': 'change', 'index': index}
         
         # Strategy 2 : If disadvantaged by the type, try to change
-        if self._has_type_disadvantage(self.pokemon_actif, adversary_pokemon):
+        if self._has_type_disadvantage(self.active_pokemon, adversary_pokemon):
             best_pokemon = self._find_best_pokemon(adversary_pokemon)
-            if best_pokemon and best_pokemon != self.pokemon_actif:
+            if best_pokemon and best_pokemon != self.active_pokemon:
                 index = self.team.index(best_pokemon)
                 return {'action': 'change', 'index': index}
         
@@ -224,9 +224,9 @@ class Champion(Trainer):
         Returns:
             bool: True if the attacker has a type advantage
         """
-        from models.pokemon import Pokemon
+        from my_package.models.pokemon import Pokemon
         
-        effectiveness = Pokemon.EFFICACITES.get(attacker.type, {}).get(defender.type, 1.0)
+        effectiveness = Pokemon.EFFICIENCY.get(attacker.type, {}).get(defender.type, 1.0)
         return effectiveness > 1.0
     
     def _has_type_disadvantage(self, attacker, defender):
@@ -240,7 +240,7 @@ class Champion(Trainer):
         Returns:
             bool: True if the attacker has a type disadvantage
         """
-        from models.pokemon import Pokemon
+        from my_package.models.pokemon import Pokemon
         
-        effectiveness = Pokemon.EFFICACITES.get(attacker.type, {}).get(defender.type, 1.0)
+        effectiveness = Pokemon.EFFICIENCY.get(attacker.type, {}).get(defender.type, 1.0)
         return effectiveness < 1.0
