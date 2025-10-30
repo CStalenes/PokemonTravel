@@ -42,7 +42,7 @@ class Arena:
         Returns:
             bool: True if the challenge can start, False otherwise
         """
-        if self.vaincue:
+        if self.defeated:
             print(f"\n You have already defeated {self.name} !")
             print(f" You already have the {self.badge}")
             return False
@@ -96,7 +96,7 @@ class Arena:
         print(f"{self.champion.name}: \"You have potential, but you need to")
         print(f"    train yourself. Come back to me when you are ready !\"")
     
-    def display_info(self):
+    def display_info_arena(self):
         """
         Display the detailed information of the arena
         """
@@ -120,7 +120,7 @@ class Arena:
         
         print(f"{'='*60}")
 
-    def reset(self):
+    def reset_arena(self):
         """
         Reset the arena (for tests or replaying)
         """

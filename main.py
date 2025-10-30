@@ -52,43 +52,6 @@ class Game:
         print(f"   Type: {starter.type_pokemon} | Level: {starter.level}")
         print(f"   HP: {starter.hp_max} | Attack: {starter.attack}")
 
-    def main_menu(self):
-        """Display the main menu and manage the choices"""
-        while self.en_cours:
-            clear_screen()
-            display_title("MAIN MENU")
-            
-            print(f"\nTrainer: {self.player.name}")
-            print(f"Badges obtained: {len(self.defeated_arenas)}/3")
-            
-            display_separator()
-            
-            options = [
-                "View my team",
-                "Challenge an arena",
-                "Train (random fight)",
-                "View the arenas",
-                "Quit the game"
-            ]
-
-            display_menu(options)
-            
-            choice = input("\nYour choice : ").strip()
-            
-            if choice == '1':
-                self.afficher_equipe()
-            elif choice == '2':
-                self.choose_arena()
-            elif choice == '3':
-                self.train()
-            elif choice == '4':
-                self.display_arenas()
-            elif choix == '5':
-                self.quit_game()
-            else:
-                print("\nInvalid choice !")
-                input("\nPress Enter...")
-    
     def display_team(self):
         """Display the player's team"""
         clear_screen()
@@ -117,7 +80,7 @@ class Game:
 
         # Fire Arena
         fire_champion = Champion("Pierre", "Fire")
-        champion_feu.add_pokemon(FirePokemon("Ponyta", level=8))
+        fire_champion.add_pokemon(FirePokemon("Ponyta", level=8))
         fire_champion.add_pokemon(FirePokemon("Goupix", level=10))
         fire_arena = Arena("Fire Arena", "Fire", fire_champion, "Badge Volcan")
 
@@ -136,24 +99,74 @@ class Game:
         self.arenas.extend([fire_arena, water_arena, plant_arena])
 
     # Challenge an arena
-    def challenge_arena(self, arena):
-        """Challenge an arena"""
-        if not arena.challenge():
-            return  # Arena already defeated
+   def challenge_arena(self, arena):
+        """Start a fight against the arena champion"""
+        clear_screen()
+        display_title(f"CHALLENGE: {arena.name.upper()}")
         
-        # Display strategic advice
-        arena.display_advice()
+        print(f"\n{'='*60}")
+        print(f"\n🎯 Champion {arena.champion.name} is waiting for you !")
+        print(f"⚡ Specialité: Type {arena.type_arena}")
+        print(f"{'='*60}")
+        
+        input("\nPress Enter to start the fight...")
         
         # Start the fight
         fight = FightingSystem(self.player, arena.champion)
         victory = fight.start()
         
-        # Handle the result
         if victory:
-            arena.player_victory()
             self.defeated_arenas.append(arena)
+            # print(f"\n🏆 VICTORY ! You have obtained the Badge {arena.badge} !")
+            arena.player_victory()
+            
+            # Check if all arenas are defeated
+            # if len(self.defeated_arenas) == 3:
+            #    self.final_victory()
         else:
-            arena.player_defeat()
+            print("\nDEFEAT... Train yourself and come back stronger !")
+        
+        input("\nPress Enter to continue...")
+
+    def main_menu(self):
+        """Display the main menu and manage the choices"""
+
+        while self.ongoing:
+            clear_screen()
+            display_title("MAIN MENU")
+            
+            print(f"\nTrainer: {self.player.name}")
+            print(f"Badges obtained: {len(self.defeated_arenas)}/3")
+            
+            display_separator()
+            
+            options = [
+                "View my team",
+                "Challenge an arena",
+                "Train (random fight)",
+                "View the arenas",
+                "Quit the game"
+            ]
+
+            display_menu(options)
+            
+            choice = input("\nYour choice : ").strip()
+            
+            if choice == '1':
+                self.display_team()
+            elif choice == '2':
+                self.challenge_arena()
+            elif choice == '3':
+                self.train_randomly()
+            elif choice == '4':
+                self.display_arenas()
+            elif choice == '5':
+                self.quit_game()
+            else:
+                print("\nInvalid choice !")
+                input("\nPress Enter...")
+    
+    
     
 def main():
     """Main function"""
