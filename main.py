@@ -112,8 +112,8 @@ class Game:
         display_title(f"CHALLENGE: {arena.name.upper()}")
         
         print(f"\n{'='*60}")
-        print(f"\n🎯 Champion {arena.champion.name} is waiting for you !")
-        print(f"⚡ Specialité: Type {arena.type_arena}")
+        print(f"\nChampion {arena.champion.name} is waiting for you !")
+        print(f"Specialité: Type {arena.type_arena}")
         print(f"{'='*60}")
         
         input("\nPress Enter to start the fight...")
