@@ -128,6 +128,18 @@ class Game:
         
         input("\nPress Enter to continue...")
 
+    def display_arenas(self):
+        """Display the status of all arenas"""
+        clear_screen()
+        display_title("ARENAS STATUS")
+        
+        for arena in self.arenas:
+            status = "**DEFEATED**" if arena in self.defeated_arenas else "**TO CHALLENGE**"
+            print(f"\n{status} - {arena.name}")
+            print(f"   Type: {arena.type_arena}")
+            print(f"   Champion: {arena.champion.name}")
+        input("\nPress Enter to return...")
+
     def main_menu(self):
         """Display the main menu and manage the choices"""
 
