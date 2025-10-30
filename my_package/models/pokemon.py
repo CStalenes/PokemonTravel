@@ -171,3 +171,20 @@ class PokemonFactory:
             raise ValueError(f"Type '{type_pokemon}' unknown")
         
         return pokemon_class(name, level)
+    
+    @staticmethod
+    def create_team(list_pokemon):
+        """
+        Create a complete team of Pokémon
+        
+        Args:
+            list_pokemon: List of tuples (name, type, level)
+            
+        Returns:
+            list: List of created Pokémon
+        """
+        team = []
+        for name, type_pokemon, level in list_pokemon:
+            pokemon = PokemonFactory.create_pokemon(name, type_pokemon, level)
+            team.append(pokemon)
+        return team
