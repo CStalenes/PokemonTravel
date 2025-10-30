@@ -111,6 +111,24 @@ class Game:
         print(f"Badges obtained: {len(self.defeated_arenas)}/3")
         
         self.ongoing = False
+
+    def create_arenas(self):
+    """Create the three arenas with their champions"""
+    
+    # Fire Arena
+    fire_champion = Champion("Pierre", "Fire")
+    champion_feu.add_pokemon(FirePokemon("Ponyta", level=8))
+    fire_champion.add_pokemon(FirePokemon("Goupix", level=10))
+    
+    # Water Arena  
+    water_champion = Champion("Ondine", "Water")
+    water_champion.add_pokemon(WaterPokemon("Stari", level=12))
+    water_champion.add_pokemon(WaterPokemon("Psykokwak", level=14))
+    
+    # Plant Arena
+    plant_champion = Champion("Erika", "Plant")
+    plant_champion.add_pokemon(PlantPokemon("Mystherbe", level=16))
+    plant_champion.add_pokemon(PlantPokemon("Chétiflor", level=18))
     
 def main():
     """Main function"""
