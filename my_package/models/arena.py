@@ -193,7 +193,21 @@ class Floor:
             return True
         return False
 
-        # bloc equal return previous_floor is not None and previous_floor.defeated:
+        # this bloc equal return previous_floor is not None and previous_floor.defeated:
 
-    def challenge(self):
-        """
+
+    def display_info_floor(self):
+        """Display the information of the floor"""
+        statut = "**DEFEATED**" if self.defeated else "**TO CHALLENGE**"
+        
+        print(f"\n{'='*60}")
+        print(f"FLOOR {self.number} - {self.description}")
+        print(f"{'='*60}")
+        print(f"Status: {statut}")
+        print(f"Trainer: {self.trainer.name}")
+        print(f"\n--- Trainer Team ---")
+        
+        for i, pokemon in enumerate(self.trainer.team, 1):
+            print(f"  {i}. {pokemon.name} (Lvl.{pokemon.level}) - Type {pokemon.type_pokemon}")
+        
+        print(f"{'='*60}")
