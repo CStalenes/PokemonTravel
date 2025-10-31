@@ -134,13 +134,13 @@ class WaterPokemon(Pokemon):
         super().__init__(name,'Water', level)
         self.defense += 1
 
-class PlanPokemon(Pokemon):
+class PlantPokemon(Pokemon):
     """Pokemon plant type """
 
     def __init__(self, name, level=5):
         super().__init__(name, "Plant", level)
         self.hp_max += 2
-        self.hp_max = self.hp_max 
+        self.hp_max = self.hp_max
 
 
 class PokemonFactory:

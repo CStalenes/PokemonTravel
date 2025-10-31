@@ -1,7 +1,7 @@
 from my_package.models.pokemon import FirePokemon, WaterPokemon, PlantPokemon
 from my_package.models.trainer import Trainer, Champion
 from my_package.models.arena import Arena
-from my_package.fighting.fighting_system import FightingSystem
+from fighting.fighting_system import FightingSystem
 from my_package.utils.display import display_title, display_menu, clear_screen, display_separator
 
 
@@ -106,7 +106,7 @@ class Game:
         self.arenas.extend([fire_arena, water_arena, plant_arena])
 
     # Challenge an arena
-   def challenge_arena(self, arena):
+    def challenge_arena(self, arena):
         """Start a fight against the arena champion"""
         clear_screen()
         display_title(f"CHALLENGE: {arena.name.upper()}")
