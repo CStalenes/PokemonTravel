@@ -96,8 +96,15 @@ class Arena:
 
         print(f"{self.champion.name}: \"I am {self.champion.name}, ")
         print(f"    master of the {self.type_arena} ! Are you ready to challenge me ?\"")
+
+    def display_progression_floors(self):
+        """Display the progression in the floors of the arena"""
+        print(f"\n{'='*70}")
+        print(f"PROGRESSION IN {self.name.upper()}")
+        print(f"{'='*70}")
         
-        return True #self.floors[0]
+        for floor in self.floors:
+            print(floor)
         
     def get_current_floor(self):
         """
