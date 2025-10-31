@@ -4,7 +4,11 @@ from my_package.models.arena import Arena
 from fighting.fighting_system import FightingSystem
 from utils.display import display_title, display_menu, clear_screen, display_separator
 from my_package.models.pokemon import PokemonGenerator, PokemonFactory
+from utils.save_system import SaveSystem
 import random
+import json
+import os
+
 random.seed(42)
 
 
@@ -215,6 +219,18 @@ class Game:
         
         print(f"\nSee you soon, {self.player.name} !")
         print(f"Badges obtained: {len(self.defeated_arenas)}/3")
+        
+        # Ask to save before quitting
+        while True:
+            choice = input("\nSave your progress before quitting? (y/n): ").strip().lower()
+            if choice == 'y':
+                SaveSystem.save_game(self.player, self.defeated_arenas)
+                break
+            elif choice == 'n':
+                print("\nProgress not saved.")
+                break
+            else:
+                print("Please enter 'y' or 'n'")
         
         self.ongoing = False
 
