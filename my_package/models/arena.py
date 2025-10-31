@@ -141,7 +141,7 @@ class Arena:
         previous_floor = self.floors[floor_number - 2]
         return previous_floor.defeated and not floor.defeated
 
-     def player_victory_floor(self, floor_number):
+    def player_victory_floor(self, floor_number):
         """
         Mark a floor as defeated
         
