@@ -188,3 +188,21 @@ class PokemonFactory:
             pokemon = PokemonFactory.create_pokemon(name, type_pokemon, level)
             team.append(pokemon)
         return team
+
+class PokemonGenerator:
+    """Generator of random Pokémon"""
+    
+    NAMES_BY_TYPE = {
+        'Fire': ["Ponyta", "Goupix", "Caninos", "Magmar"],
+        'Water': ["Psykokwak", "Poissirène", "Tentacool", "Krabby"],
+        'Plant': ["Mystherbe", "Chétiflor", "Saquedeneu", "Boustiflor"]
+    }
+    
+    @staticmethod
+    def generate_wild_pokemon(player_level):
+    """Generate a random wild Pokemon"""
+    type_pokemon = random.choice(['Fire', 'Water', 'Plant'])
+    name = random.choice(PokemonGenerator.NAMES_BY_TYPE[type_pokemon])
+    level = max(1, player_level - random.randint(1, 3))
+    
+    return PokemonFactory.create_pokemon(name, type_pokemon, level)
