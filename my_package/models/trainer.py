@@ -159,7 +159,7 @@ class Champion(Trainer):
             dict: Action to perform {'action': 'attack'/'change', 'index': int}
         """
         # Strategy 1 : If the active Pokemon is in bad shape, try to change
-        if self.active_pokemon.current_hp < self.active_pokemon.hp_max * 0.3:
+        if self.active_pokemon.hp_actuals < self.active_pokemon.hp_max * 0.3:
             # Search for a Pokemon in better shape
             best_pokemon = self._find_best_pokemon(adversary_pokemon)
             if best_pokemon and best_pokemon != self.active_pokemon:
@@ -196,7 +196,7 @@ class Champion(Trainer):
             score = 0
             
             # Score based on remaining HP (0-100)
-            score += (pokemon.current_hp / pokemon.hp_max) * 100
+            score += (pokemon.hp_actuals / pokemon.hp_max) * 100
             
             # Bonus if type advantage (+200)
             if self._has_type_advantage(pokemon, adversary_pokemon):
