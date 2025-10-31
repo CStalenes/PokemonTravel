@@ -226,7 +226,7 @@ class Champion(Trainer):
         """
         from my_package.models.pokemon import Pokemon
         
-        effectiveness = Pokemon.EFFICIENCY.get(attacker.type, {}).get(defender.type, 1.0)
+        effectiveness = Pokemon.EFFICIENCY.get(attacker.type_pokemon, {}).get(defender.type_pokemon, 1.0)
         return effectiveness > 1.0
     
     def _has_type_disadvantage(self, attacker, defender):
@@ -242,5 +242,5 @@ class Champion(Trainer):
         """
         from my_package.models.pokemon import Pokemon
         
-        effectiveness = Pokemon.EFFICIENCY.get(attacker.type, {}).get(defender.type, 1.0)
+        effectiveness = Pokemon.EFFICIENCY.get(attacker.type_pokemon, {}).get(defender.type_pokemon, 1.0)
         return effectiveness < 1.0

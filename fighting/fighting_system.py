@@ -174,7 +174,7 @@ class FightingSystem:
             return {'type': 'attack', 'trainer': player}
         
         elif choice == '2':
-            return self._menu_changement_pokemon(player)
+            return self._menu_change_pokemon(player)
         
         elif choice == '3':
             return 'flee'
@@ -241,10 +241,10 @@ class FightingSystem:
             
             if decision['action'] == 'change':
                 adversary.choose_pokemon(decision['index'])
-                return {'type': 'change', 'adversary': adversary}
+                return {'type': 'change', 'trainer': adversary}
         
         # Default : attack
-        return {'type': 'attack', 'adversary': adversary}
+        return {'type': 'attack', 'trainer': adversary}
     
     def _resolve_actions(self, action1, action2):
         """
