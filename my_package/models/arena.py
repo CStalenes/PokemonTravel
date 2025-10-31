@@ -166,6 +166,24 @@ class Arena:
             # Unlock the next floor
             print(f"\nThe floor {floor_number + 1} is now accessible !")
             print(f"{'='*70}\n")
+
+
+    def player_defeat_floor(self, floor_number):
+        """
+        Manage the defeat of a floor
+        
+        Args:
+            floor_number (int): Number of the floor
+        """
+        floor = self.floors[floor_number - 1]
+        
+        print(f"\n{'='*70}")
+        print(f"DEFEAT AT FLOOR {floor_number}...")
+        print(f"{'='*70}")
+        print(f"{floor.trainer.name} was too strong...")
+        print(f"Train yourself and come back stronger !")
+        print(f"\nYou will have to start again from floor 1")
+        print(f"{'='*70}\n")
     
     def player_victory(self):
         """
