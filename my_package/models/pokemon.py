@@ -75,12 +75,35 @@ class Pokemon:
         
         # 5. Random variability (between 0.85 and 1.0)
         variability = random.uniform(0.85, 1.0)
-
+        
+        # Calculate final damage
+        final_damage = int(base_damage * type_multiplier * variability)
+        final_damage = max(1, final_damage)  # Minimum 1 damage
+        
+        # Apply damage to target
+        target.hp_actuals -= final_damage
+        target_knocked_out = False
+        
+        if target.hp_actuals <= 0:
+            target.hp_actuals = 0
+            target.ko = True
+            target_knocked_out = True
 
         # 6. Constructing the attack message
+        messages = []
         main_message = f"{self.name} attacks {target.name}!"
-        damage_message = f"-> {final_damage} damage points inflicted"
-
+        messages.append(main_message)
+        
+        # Determine effectiveness message
+        if type_multiplier > 1.0:
+            effectiveness_message = "It's super effective!"
+        elif type_multiplier < 1.0:
+            effectiveness_message = "It's not very effective..."
+        else:
+            effectiveness_message = ""
+        
+        damage_message = f"→ {final_damage} damage points inflicted"
+        
         if effectiveness_message:
             messages.append(f"   {effectiveness_message}")
         messages.append(damage_message)
@@ -91,7 +114,7 @@ class Pokemon:
             'message': '\n'.join(messages),
             'damage': final_damage,
             'type_multiplier': type_multiplier,
-            'target_knocked_out': target.ko
+            'target_knocked_out': target_knocked_out
         }
 
     def receive_damage(self, damage):
