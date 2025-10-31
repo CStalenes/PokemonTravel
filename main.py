@@ -106,6 +106,36 @@ class Game:
         self.arenas.extend([fire_arena, water_arena, plant_arena])
 
     # Challenge an arena
+    def choose_and_challenge_arena(self):
+        """Let the player choose an arena to challenge"""
+        clear_screen()
+        display_title("CHOOSE AN ARENA TO CHALLENGE")
+        
+        available_arenas = [arena for arena in self.arenas if arena not in self.defeated_arenas]
+        
+        if not available_arenas:
+            print("\nAll arenas have been defeated! You are a true champion!")
+            input("\nPress Enter to continue...")
+            return
+        
+        for i, arena in enumerate(available_arenas, 1):
+            print(f"\n{i}. {arena.name}")
+            print(f"   Type: {arena.type_arena}")
+            print(f"   Champion: {arena.champion.name}")
+        
+        choice = input("\nChoose an arena (number) : ").strip()
+        
+        try:
+            arena_index = int(choice) - 1
+            if 0 <= arena_index < len(available_arenas):
+                self.challenge_arena(available_arenas[arena_index])
+            else:
+                print("\nInvalid choice!")
+                input("\nPress Enter...")
+        except ValueError:
+            print("\nPlease enter a valid number!")
+            input("\nPress Enter...")
+    
     def challenge_arena(self, arena):
         """Start a fight against the arena champion"""
         clear_screen()
@@ -174,7 +204,7 @@ class Game:
             if choice == '1':
                 self.display_team()
             elif choice == '2':
-                self.challenge_arena()
+                self.choose_and_challenge_arena()
             elif choice == '3':
                 self.train_randomly()
             elif choice == '4':
