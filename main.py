@@ -27,7 +27,10 @@ class Game:
         
         self.player = Trainer(player_name)
         
-        # Choice of starter or custom team
+        # Choose starter first (required)
+        self.choose_starter()
+        
+        # Then choose how to complete the team
         self.choose_team_mode()
         
         # Creation of the arenas
