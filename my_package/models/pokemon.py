@@ -200,9 +200,17 @@ class PokemonGenerator:
     
     @staticmethod
     def generate_wild_pokemon(player_level):
-    """Generate a random wild Pokemon"""
-    type_pokemon = random.choice(['Fire', 'Water', 'Plant'])
-    name = random.choice(PokemonGenerator.NAMES_BY_TYPE[type_pokemon])
-    level = max(1, player_level - random.randint(1, 3))
-    
-    return PokemonFactory.create_pokemon(name, type_pokemon, level)
+        """
+        Generate a random wild Pokemon
+        
+        Args:
+            player_level (int): Level of the player
+            
+        Returns:
+            Pokemon: Instance of the generated Pokemon
+        """
+        type_pokemon = random.choice(['Fire', 'Water', 'Plant'])
+        name = random.choice(PokemonGenerator.NAMES_BY_TYPE[type_pokemon])
+        level = max(1, player_level - random.randint(1, 3))
+        
+        return PokemonFactory.create_pokemon(name, type_pokemon, level)
