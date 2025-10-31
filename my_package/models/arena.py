@@ -1,4 +1,5 @@
 from my_package.models.floor import Floor
+from my_package.models.trainer import Trainer
 
 class Arena:
 
