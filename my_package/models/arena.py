@@ -77,19 +77,62 @@ class Arena:
         
         self.nb_attempts += 1
         
-        print(f"\n{'='*60}")
+        print(f"\n{'='*70}")
         print(f"WELCOME TO {self.name.upper()}")
-        print(f"{'='*60}")
+        print(f"{'='*70}")
         print(f"Type Arena: {self.type_arena}")
         print(f"Champion: {self.champion.name}")
         print(f"Reward: {self.badge}")
         print(f"Attempts: {self.nb_attempts}")
-        print(f"{'='*60}\n")
+        print(f"{'='*70}\n")
+
+        print(f"📢 Announcement: \"Welcome to {self.name} !\"")
+        print(f"   To challenge the Champion {self.champion.name},")
+        print(f"   you must first defeat the trainers of the floors 1 and 2 !")
+        print(f"\n    The arena has 3 floors:")
+        print(f"   1. Entrance Hall - Beginner Trainer")
+        print(f"   2. Training Room - Intermediate Trainer")
+        print(f"   3. Champion's Room - {self.champion.name}")
 
         print(f"{self.champion.name}: \"I am {self.champion.name}, ")
         print(f"    master of the {self.type_arena} ! Are you ready to challenge me ?\"")
         
-        return True
+        return True #self.floors[0]
+        
+    def get_current_floor(self):
+        """
+        Return the current floor accessible
+        
+        Returns:
+            Floor: Next floor to challenge, or None if all floors defeated
+        """
+        for floor in self.floors:
+            if not floor.defeated:
+                return floor
+        return None
+    
+    def is_floor_accessible(self, floor_number):
+        """
+        Check if a floor is accessible
+        
+        Args:
+            floor_number (int): Number of the floor (1-3)
+            
+        Returns:
+            bool: True if accessible
+        """
+        if floor_number < 1 or floor_number > 3:
+            return False
+        
+        floor = self.floors[floor_number - 1]
+        
+        # Floor 1 is always accessible
+        if floor_number == 1:
+            return not floor.defeated
+        
+        # Floors 2 and 3: check if the previous floor is defeated
+        previous_floor = self.floors[floor_number - 2]
+        return previous_floor.defeated and not floor.defeated
     
     def player_victory(self):
         """
