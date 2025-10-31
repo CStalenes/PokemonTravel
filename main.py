@@ -219,57 +219,55 @@ class Game:
         self.ongoing = False
 
     def create_arenas(self):
-        """Create the three arenas with their champions"""
+        """Create the three arenas with their champions and floors"""
 
         # Fire Arena
-
-        # Floor 1: Beginner Trainer
-        beginner_trainer = Trainer("Sam")
-        beginner_trainer.add_pokemon(FirePokemon("Goupix", level=8))
-        
-        # Floor 2: Intermediate Trainer
-        intermediate_trainer = Trainer("Robert")
-        intermediate_trainer.add_pokemon(FirePokemon("Ponyta", level=8))
-        intermediate_trainer.add_pokemon(FirePokemon("Caninos", level=8))
-    
-        # Floor 3: Champion
         fire_champion = Champion("Pierre", "Fire")
         fire_champion.add_pokemon(FirePokemon("Ponyta", level=8))
         fire_champion.add_pokemon(FirePokemon("Goupix", level=10))
-        fire_arena = Arena("Fire Arena", "Fire", fire_champion, "Badge Volcan")
-
-        # Water Arena
-
-
-        # Floor 1: Beginner Trainer
-        beginner_trainer = Trainer("Sandy")
-        beginner_trainer.add_pokemon(WaterPokemon("Stari", level=8))
         
-        # Floor 2: Intermediate Trainer
-        intermediate_trainer = Trainer("Gerald")
-        intermediate_trainer.add_pokemon(WaterPokemon("Poissirène", level=10))
-        intermediate_trainer.add_pokemon(WaterPokemon("Tentacool", level=11))
-    
-        # Floor 3: Champion
+        fire_floor1_trainer = Champion("Eric", "Fire")
+        fire_floor1_trainer.add_pokemon(FirePokemon("Charmander", level=5))
+        fire_floor1_trainer.add_pokemon(FirePokemon("Vulpix", level=6))
+        
+        fire_floor2_trainer = Champion("Megan", "Fire")
+        fire_floor2_trainer.add_pokemon(FirePokemon("Ponyta", level=7))
+        fire_floor2_trainer.add_pokemon(FirePokemon("Growlithe", level=8))
+        
+        fire_arena = Arena("Fire Arena", "Fire", fire_champion, "Badge Volcan")
+        fire_arena.add_floors(fire_floor1_trainer, fire_floor2_trainer)
+
+        # Water Arena  
         water_champion = Champion("Ondine", "Water")
         water_champion.add_pokemon(WaterPokemon("Stari", level=12))
         water_champion.add_pokemon(WaterPokemon("Psykokwak", level=14))
+        
+        water_floor1_trainer = Champion("Sandy", "Water")
+        water_floor1_trainer.add_pokemon(WaterPokemon("Squirtle", level=11))
+        water_floor1_trainer.add_pokemon(WaterPokemon("Staryu", level=12))
+        
+        water_floor2_trainer = Champion("Gerald", "Water")
+        water_floor2_trainer.add_pokemon(WaterPokemon("Poliwag", level=13))
+        water_floor2_trainer.add_pokemon(WaterPokemon("Slowbro", level=14))
+        
         water_arena = Arena("Water Arena", "Water", water_champion, "Badge Marine")
+        water_arena.add_floors(water_floor1_trainer, water_floor2_trainer)
 
         # Plant Arena
-
-        # Floor 1: Beginner Trainer
-        beginner_trainer = Trainer("John")
-        beginner_trainer.add_pokemon(PlantPokemon("Mystherbe", level=12))
-        
-        # Floor 2: Intermediate Trainer
-        intermediate_trainer = Trainer("Bill")
-        intermediate_trainer.add_pokemon(PlantPokemon("Chétiflor", level=13))
-        
         plant_champion = Champion("Erika", "Plant")
-        plant_champion.add_pokemon(PlantPokemon("Saquedeneu", level=14))
-        plant_champion.add_pokemon(PlantPokemon("Boustiflor", level=16))
+        plant_champion.add_pokemon(PlantPokemon("Mystherbe", level=16))
+        plant_champion.add_pokemon(PlantPokemon("Chétiflor", level=18))
+        
+        plant_floor1_trainer = Champion("John", "Plant")
+        plant_floor1_trainer.add_pokemon(PlantPokemon("Bulbasaur", level=14))
+        plant_floor1_trainer.add_pokemon(PlantPokemon("Oddish", level=15))
+        
+        plant_floor2_trainer = Champion("Bill", "Plant")
+        plant_floor2_trainer.add_pokemon(PlantPokemon("Exeggcute", level=15))
+        plant_floor2_trainer.add_pokemon(PlantPokemon("Bellsprout", level=16))
+        
         plant_arena = Arena("Plant Arena", "Plant", plant_champion, "Badge Vert")
+        plant_arena.add_floors(plant_floor1_trainer, plant_floor2_trainer)
 
         self.arenas.extend([fire_arena, water_arena, plant_arena])
 
@@ -296,7 +294,7 @@ class Game:
         try:
             arena_index = int(choice) - 1
             if 0 <= arena_index < len(available_arenas):
-                self.challenge_arena(available_arenas[arena_index])
+                self.challenge_arena_with_floors(available_arenas[arena_index])
             else:
                 print("\nInvalid choice!")
                 input("\nPress Enter...")
@@ -304,34 +302,54 @@ class Game:
             print("\nPlease enter a valid number!")
             input("\nPress Enter...")
     
-    def challenge_arena(self, arena):
-        """Start a fight against the arena champion"""
+    def challenge_arena_with_floors(self, arena):
+        """Challenge an arena by fighting through all 3 floors"""
         clear_screen()
-        display_title(f"CHALLENGE: {arena.name.upper()}")
+        arena.challenge()
+        input("\nPress Enter to enter the arena...")
         
-        print(f"\n{'='*60}")
-        print(f"\nChampion {arena.champion.name} is waiting for you !")
-        print(f"Specialité: Type {arena.type_arena}")
-        print(f"{'='*60}")
-        
-        input("\nPress Enter to start the fight...")
-        
-        # Start the fight
-        fight = FightingSystem(self.player, arena.champion)
-        victory = fight.start()
-        
-        if victory:
-            self.defeated_arenas.append(arena)
-            # print(f"\n🏆 VICTORY ! You have obtained the Badge {arena.badge} !")
-            arena.player_victory()
+        # Fight through floors 1, 2, and 3
+        for floor_num in range(1, 4):
+            if not arena.is_floor_accessible(floor_num):
+                if floor_num > 1 and not arena.floors[floor_num - 2].defeated:
+                    print(f"\nFloor {floor_num} is locked. Defeat floor {floor_num - 1} first!")
+                continue
             
-            # Check if all arenas are defeated
-            # if len(self.defeated_arenas) == 3:
-            #    self.final_victory()
-        else:
-            print("\nDEFEAT... Train yourself and come back stronger !")
-        
-        input("\nPress Enter to continue...")
+            floor = arena.floors[floor_num - 1]
+            
+            clear_screen()
+            display_title(f"CHALLENGE: FLOOR {floor_num} - {floor.description}")
+            print(f"\nTrainer: {floor.trainer.name}")
+            
+            # Fight the trainer
+            fight = FightingSystem(self.player, floor.trainer)
+            victory = fight.start()
+            
+            if victory:
+                floor.player_victory_floor()
+                arena.player_victory_floor(floor_num)
+                
+                if floor_num < 3:
+                    print(f"\nFloor {floor_num + 1} is now accessible!")
+                    input("\nPress Enter to continue...")
+                else:
+                    # Victory at floor 3 (champion)
+                    arena.player_victory()
+                    self.defeated_arenas.append(arena)
+                    input("\nPress Enter to continue...")
+                    break
+            else:
+                arena.player_defeat_floor(floor_num)
+                # Reset floors
+                for floor_to_reset in arena.floors:
+                    floor_to_reset.reset_floor()
+                input("\nPress Enter to continue...")
+                break
+            
+            # Heal team for next floor
+            self.player.heal_team()
+    
+    
 
     def catch_new_pokemon(self):
         """Allow the player to catch new Pokemon to add to their team (up to 6)"""
