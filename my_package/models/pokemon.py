@@ -1,3 +1,5 @@
+import random
+
 class Pokemon:
 
     """Basis class for Pokémon"""

@@ -4,6 +4,8 @@ from my_package.models.arena import Arena
 from fighting.fighting_system import FightingSystem
 from utils.display import display_title, display_menu, clear_screen, display_separator
 from my_package.models.pokemon import PokemonGenerator, PokemonFactory
+import random
+random.seed(42)
 
 
 class Game:
