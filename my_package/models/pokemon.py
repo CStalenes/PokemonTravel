@@ -24,10 +24,10 @@ class Pokemon:
       
         
     def __str__(self):
-        return f"{self.name} ({self.type_pokemon}) - HP: {self.hp}, Attack: {self.attack}, Defense: {self.defense}, Speed: {self.speed}, Level: {self.level}"
+        return f"{self.name} ({self.type_pokemon}) - HP: {self.hp_actuals}, Attack: {self.attack}, Defense: {self.defense}, Speed: {self.speed}, Level: {self.level}"
     
     def __repr__(self):
-        return f"Pokemon({self.name}, {self.type_pokemon}, {self.hp}, {self.attack}, {self.defense}, {self.speed}, {self.level})"
+        return f"Pokemon({self.name}, {self.type_pokemon}, {self.hp_actuals}, {self.attack}, {self.defense}, {self.speed}, {self.level})"
 
 
     def attack_pokemon(self, target):
@@ -68,7 +68,7 @@ class Pokemon:
         base_damage = max(1, base_damage)  # Minimum 1 damage
         
         # 4. Type multiplier (efficiency)
-        type_multiplier = self.EFFICIENCY.get(self.type, {}).get(target.type, 1.0)
+        type_multiplier = self.EFFICIENCY.get(self.type_pokemon, {}).get(target.type_pokemon, 1.0)
         # 4.5 On fait cela pour calculer les degat du multiplier en fonction de la cible et de l'attaquant
         
         # 5. Random variability (between 0.85 and 1.0)
@@ -89,7 +89,7 @@ class Pokemon:
             'message': '\n'.join(messages),
             'damage': final_damage,
             'type_multiplier': type_multiplier,
-            'target_knocked_out': target.knocked_out
+            'target_knocked_out': target.ko
         }
 
     def receive_damage(self, damage):
@@ -99,24 +99,24 @@ class Pokemon:
         Args:
             damage (int): Number of damage points received
         """
-        self.current_hp -= damage
+        self.hp_actuals -= damage
         
-        if self.current_hp <= 0:
-            self.current_hp = 0
-            self.knockout = True
+        if self.hp_actuals <= 0:
+            self.hp_actuals = 0
+            self.ko = True
 
     def is_knockout(self):
         """Checks if the Pokémon is knocked out"""
-        return self.knockout
+        return self.ko
 
     def heal(self):
         """Restores all of the Pokémon's HP"""
-        self.current_hp = self.max_hp
-        self.knockout = False
+        self.hp_actuals = self.hp_max
+        self.ko = False
 
     def __str__(self):
-        status = "KO" if self.ko else f"  {self.current_hp}/{self.max_hp} HP"
-        return f"{self.name} (Lvl.{self.level}) [{self.type}] - {status}"
+        status = "KO" if self.ko else f"  {self.hp_actuals}/{self.hp_max} HP"
+        return f"{self.name} (Lvl.{self.level}) [{self.type_pokemon}] - {status}"
 
 
 

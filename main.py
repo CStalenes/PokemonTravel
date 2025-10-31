@@ -2,7 +2,7 @@ from my_package.models.pokemon import FirePokemon, WaterPokemon, PlantPokemon
 from my_package.models.trainer import Trainer, Champion
 from my_package.models.arena import Arena
 from fighting.fighting_system import FightingSystem
-from my_package.utils.display import display_title, display_menu, clear_screen, display_separator
+from utils.display import display_title, display_menu, clear_screen, display_separator
 
 
 class Game:
@@ -10,7 +10,7 @@ class Game:
     
     def __init__(self):
         self.player = None
-        self.arenes = []
+        self.arenas = []
         self.defeated_arenas = []
         self.ongoing = True
         
