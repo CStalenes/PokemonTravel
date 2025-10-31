@@ -296,7 +296,7 @@ class FightingSystem:
         if not attacker or attacker.ko:
             return
         
-        if not defenseur or defenseur.ko:
+        if not defender or defender.ko:
             return
         
         # Execute the attack
@@ -304,7 +304,7 @@ class FightingSystem:
         result = attacker.attack_pokemon(defender)
         
         if result['success']:
-            print(resultat['message'])
+            print(result['message'])
             
             # Update the statistics
             if attacker_trainer == self.trainer1:
