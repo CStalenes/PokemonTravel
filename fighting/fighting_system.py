@@ -94,7 +94,7 @@ class FightingSystem:
             return
         
         # Phase 2 : Actions of trainer 2 (adversary/IA)
-        action2 = self._phase_action_adversary(self.trainer2, self.trainer1)
+        action2 = self._phase_action_ia(self.trainer2, self.trainer1)
         
         # Phase 3 : Resolution of actions (speed order)
         self._resolve_actions(action1, action2)
