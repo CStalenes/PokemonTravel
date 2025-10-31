@@ -89,7 +89,7 @@ class FightingSystem:
         action1 = self._phase_action_player(self.trainer1)
         
         # Check if the player has fled
-        if action1 == 'fuir':
+        if action1 == 'flee':
             self._flee_fight()
             return
         
