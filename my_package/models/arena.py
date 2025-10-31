@@ -140,6 +140,32 @@ class Arena:
         # Floors 2 and 3: check if the previous floor is defeated
         previous_floor = self.floors[floor_number - 2]
         return previous_floor.defeated and not floor.defeated
+
+     def player_victory_floor(self, floor_number):
+        """
+        Mark a floor as defeated
+        
+        Args:
+            floor_number (int): Number of the floor defeated
+        """
+        if floor_number < 1 or floor_number > 3:
+            return
+        
+        floor = self.floors[floor_number - 1]
+        floor.player_victory_floor()
+        
+        print(f"\n{'='*70}")
+        print(f"FLOOR {floor_number} DEFEATED !")
+        print(f"{'='*70}")
+        print(f"You have defeated {floor.trainer.name} !")
+        
+        # If it's the champion (floor 3)
+        if floor_number == 3:
+            self.player_victory()
+        else:
+            # Unlock the next floor
+            print(f"\nThe floor {floor_number + 1} is now accessible !")
+            print(f"{'='*70}\n")
     
     def player_victory(self):
         """
