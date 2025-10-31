@@ -3,6 +3,7 @@ from my_package.models.trainer import Trainer, Champion
 from my_package.models.arena import Arena
 from fighting.fighting_system import FightingSystem
 from utils.display import display_title, display_menu, clear_screen, display_separator
+from my_package.models.pokemon import PokemonGenerator, PokemonFactory
 
 
 class Game:
@@ -26,8 +27,8 @@ class Game:
         
         self.player = Trainer(player_name)
         
-        # Choice of the starter
-        self.choose_starter()
+        # Choice of starter or custom team
+        self.choose_team_mode()
         
         # Creation of the arenas
         self.create_arenas()
@@ -58,6 +59,136 @@ class Game:
         print(f"\nYou have chosen {starter.name} !")
         print(f"   Type: {starter.type_pokemon} | Level: {starter.level}")
         print(f"   HP: {starter.hp_max} | Attack: {starter.attack}")
+
+    def choose_team_mode(self):
+        """Allow player to choose how to build their team after selecting starter"""
+        while True:
+            clear_screen()
+            display_title("COMPLETE YOUR TEAM")
+            
+            starter = self.player.team[0]
+            print(f"\nYour starter {starter.name} is in your team (1/6)")
+            print("\nHow do you want to complete your team of 6?")
+            print("1. Let random Pokemon be added automatically")
+            print("2. Choose 5 more Pokemon yourself")
+            
+            choice = input("\nYour choice (1-2): ").strip()
+            
+            if choice == '1':
+                self.fill_team_randomly()
+                break
+            elif choice == '2':
+                self.build_custom_team_with_starter()
+                break
+            else:
+                print("\nInvalid choice!")
+                input("\nPress Enter to try again...")
+
+    def fill_team_randomly(self):
+        """Fill the remaining team slots with random Pokemon (up to 6 total)"""
+        print("\nFilling your team with random Pokemon...")
+        while len(self.player.team) < 6:
+            pokemon = PokemonGenerator.generate_wild_pokemon(5)
+            self.player.add_pokemon(pokemon)
+            print(f"   ✓ {pokemon.name} joined your team!")
+        
+        print("\nYour team is now complete!")
+        input("\nPress Enter to continue...")
+
+    def build_custom_team_with_starter(self):
+        """Allow the player to choose 5 more Pokemon to complete their team (starter already added)"""
+        remaining_slots = 6 - len(self.player.team)  # Should be 5
+        
+        while len(self.player.team) < 6:
+            clear_screen()
+            slots_filled = len(self.player.team)
+            display_title(f"CHOOSE POKEMON {slots_filled}/6")
+            
+            starter = self.player.team[0]
+            print(f"Your starter: {starter.name}")
+            print(f"Current team: {slots_filled}/6 Pokemon\n")
+            
+            # Generate 3 random Pokemon options
+            options = []
+            for _ in range(3):
+                pokemon = PokemonGenerator.generate_wild_pokemon(5)
+                options.append(pokemon)
+            
+            print(f"Choose one of these Pokemon:")
+            for i, pokemon in enumerate(options, 1):
+                print(f"{i}. {pokemon.name} ({pokemon.type_pokemon}) - Lvl.{pokemon.level}")
+                print(f"   HP: {pokemon.hp_max} | Attack: {pokemon.attack} | Defense: {pokemon.defense}")
+            
+            choice = input("\nYour choice (1-3): ").strip()
+            
+            try:
+                choice_index = int(choice) - 1
+                if 0 <= choice_index < 3:
+                    selected_pokemon = options[choice_index]
+                    self.player.add_pokemon(selected_pokemon)
+                    print(f"\n✓ {selected_pokemon.name} added to your team!")
+                    input("\nPress Enter to continue...")
+                else:
+                    print("\nInvalid choice! Choose between 1 and 3")
+                    input("\nPress Enter to try again...")
+            except ValueError:
+                print("\nPlease enter a valid number!")
+                input("\nPress Enter to try again...")
+        
+        clear_screen()
+        display_title("TEAM COMPLETE!")
+        print(f"\nYour team of 6 Pokemon is ready!")
+        self.player.display_team()
+        input("\nPress Enter to continue...")
+
+    def build_custom_team(self):
+        """Allow the player to build a custom team of 6 random Pokemon"""
+        clear_screen()
+        display_title("BUILD YOUR TEAM OF 6 POKEMON")
+        
+        print("\nYou will be offered random Pokemon to build your team of 6!")
+        input("\nPress Enter to start...")
+        
+        pokemon_count = 0
+        max_pokemon = 6
+        
+        while pokemon_count < max_pokemon:
+            clear_screen()
+            display_title(f"POKEMON {pokemon_count + 1}/6")
+            
+            # Generate 3 random Pokemon options
+            options = []
+            for _ in range(3):
+                pokemon = PokemonGenerator.generate_wild_pokemon(5)
+                options.append(pokemon)
+            
+            print(f"\nChoose one of these Pokemon:")
+            for i, pokemon in enumerate(options, 1):
+                print(f"{i}. {pokemon.name} ({pokemon.type_pokemon}) - Lvl.{pokemon.level}")
+                print(f"   HP: {pokemon.hp_max} | Attack: {pokemon.attack} | Defense: {pokemon.defense}")
+            
+            choice = input("\nYour choice (1-3): ").strip()
+            
+            try:
+                choice_index = int(choice) - 1
+                if 0 <= choice_index < 3:
+                    selected_pokemon = options[choice_index]
+                    self.player.add_pokemon(selected_pokemon)
+                    print(f"\n✓ {selected_pokemon.name} added to your team!")
+                    pokemon_count += 1
+                    input("\nPress Enter to continue...")
+                else:
+                    print("\nInvalid choice! Choose between 1 and 3")
+                    input("\nPress Enter to try again...")
+            except ValueError:
+                print("\nPlease enter a valid number!")
+                input("\nPress Enter to try again...")
+        
+        clear_screen()
+        display_title("TEAM COMPLETE!")
+        print(f"\nYour team of 6 Pokemon is ready!")
+        self.player.display_team()
+        input("\nPress Enter to continue...")
 
     def display_team(self):
         """Display the player's team"""
@@ -165,6 +296,69 @@ class Game:
         
         input("\nPress Enter to continue...")
 
+    def catch_new_pokemon(self):
+        """Allow the player to catch new Pokemon to add to their team (up to 6)"""
+        clear_screen()
+        display_title("CATCH NEW POKEMON")
+        
+        if len(self.player.team) >= 6:
+            print("\nYour team is full (6/6 Pokemon)!")
+            print("You cannot catch any more Pokemon.")
+            input("\nPress Enter to continue...")
+            return
+        
+        slots_available = 6 - len(self.player.team)
+        print(f"\nYou can catch {slots_available} more Pokemon to complete your team.")
+        
+        while len(self.player.team) < 6:
+            clear_screen()
+            display_title(f"CATCH POKEMON - {len(self.player.team)}/6")
+            
+            # Generate 3 random Pokemon options
+            options = []
+            for _ in range(3):
+                pokemon = PokemonGenerator.generate_wild_pokemon(5)
+                options.append(pokemon)
+            
+            print(f"\nWild Pokemon appeared! Choose one to catch:")
+            for i, pokemon in enumerate(options, 1):
+                print(f"{i}. {pokemon.name} ({pokemon.type_pokemon}) - Lvl.{pokemon.level}")
+                print(f"   HP: {pokemon.hp_max} | Attack: {pokemon.attack} | Defense: {pokemon.defense}")
+            
+            print(f"{len(options) + 1}. Skip (don't catch)")
+            
+            choice = input("\nYour choice: ").strip()
+            
+            try:
+                choice_index = int(choice) - 1
+                if choice_index == len(options):  # Skip option
+                    print("\nYou left the Pokemon alone.")
+                    input("\nPress Enter to continue...")
+                    break
+                elif 0 <= choice_index < 3:
+                    selected_pokemon = options[choice_index]
+                    if self.player.add_pokemon(selected_pokemon):
+                        print(f"\n✓ You caught {selected_pokemon.name}!")
+                        print(f"   {selected_pokemon.name} was added to your team!")
+                        
+                        if len(self.player.team) < 6:
+                            continue_catching = input("\nCatch another Pokemon? (y/n): ").strip().lower()
+                            if continue_catching != 'y':
+                                break
+                        else:
+                            print("\nYour team is now full (6/6)!")
+                            input("\nPress Enter to continue...")
+                            break
+                    else:
+                        print("\nYour team is full!")
+                        break
+                else:
+                    print("\nInvalid choice!")
+                    input("\nPress Enter to try again...")
+            except ValueError:
+                print("\nPlease enter a valid number!")
+                input("\nPress Enter to try again...")
+
     def display_arenas(self):
         """Display the status of all arenas"""
         clear_screen()
@@ -192,6 +386,7 @@ class Game:
             options = [
                 "View my team",
                 "Challenge an arena",
+                "Catch new Pokemon",
                 "Train (random fight)",
                 "View the arenas",
                 "Quit the game"
@@ -206,10 +401,12 @@ class Game:
             elif choice == '2':
                 self.choose_and_challenge_arena()
             elif choice == '3':
-                self.train_randomly()
+                self.catch_new_pokemon()
             elif choice == '4':
-                self.display_arenas()
+                self.train_randomly()
             elif choice == '5':
+                self.display_arenas()
+            elif choice == '6':
                 self.quit_game()
             else:
                 print("\nInvalid choice !")
