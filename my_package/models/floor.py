@@ -23,16 +23,6 @@ class Floor:
         self.defeated = False
         self.description = description or f"Floor {number}"
 
-        # Floors will be added with add_floors()
-        self.floors = []
-        
-        # The champion is always at the floor 3
-        self.champion = champion
-        
-        # Statistics
-        self.nb_attempts = 0
-        self.nb_victories = 0
-
     def is_available(self, previous_floor=None):
         """
         Check if the floor is available to challenge

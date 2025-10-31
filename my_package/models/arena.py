@@ -27,6 +27,32 @@ class Arena:
         self.nb_attempts = 0
         self.nb_victories = 0
 
+        # Floors will be added with add_floors
+        self.floors = []
+        
+        # The champion is always at the floor 3
+        self.champion = champion
+    
+    def add_floors(self, trainer_floor1, trainer_floor2):
+        """
+        Configure the 3 floors of the arena
+        
+        Args:
+            trainer_floor1 (Trainer): Trainer of the floor 1
+            trainer_floor2 (Trainer): Trainer of the floor 2
+        """
+        # Floor 1: Beginner Trainer
+        floor1 = Floor(1, trainer_floor1, f"{self.name} - Entrance Hall")
+
+        # Floor 2: Intermediate Trainer
+        floor2 = Floor(2, trainer_floor2, f"{self.name} - Training Room")
+        
+        # Floor 3: Champion
+        floor3 = Floor(3, self.champion, f"{self.name} - Champion's Room")
+        
+        self.floors = [floor1, floor2, floor3]
+        
+
     def is_available(self):
         """
         Check if the arena is available to challenge
